@@ -1,10 +1,3 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
-  <br>
-  <img src="https://img.shields.io/badge/Laravel-12.x-orange?style=for-the-badge&logo=laravel" alt="Laravel Version">
-  <img src="https://img.shields.io/badge/PHP-8.2+-blue?style=for-the-badge&logo=php" alt="PHP Version">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
-</p>
 
 # 🎓 منصتي - منصة التعليم الإلكتروني
 
