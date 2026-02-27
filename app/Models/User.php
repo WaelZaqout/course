@@ -57,28 +57,46 @@ class User extends Authenticatable
     }
 
     /**
+     * تحقق إذا المستخدم معلم (لديه صلاحية إنشاء كورسات)
+     * يتم التحقق من دور المستخدم أو من الاشتراك النشط للمعلمين
+     */
+    public function isTeacher(): bool
+    {
+        // إذا كان دور المستخدم هو معلم
+        if ($this->role === 'teacher') {
+            return true;
+        }
+
+        // التحقق من الاشتراك النشط للمعلمين
+        return $this->hasActivePlan('teacher');
+    }
+
+    /**
      * تحقق إذا للمستخدم اشتراك نشط
      * وإذا انتهت الاشتراك يتم سحب صلاحيات المعلم تلقائيًا
      */
-    public function hasActivePlan($role = null)
+    public function hasActivePlan($audience = null)
     {
         $subscription = $this->subscription('default');
 
-        // إذا الاشتراك موجود وانتهت صلاحيته
-        if ($subscription && !$subscription->active()) {
-            if ($this->role === 'teacher') {
-                $this->role = 'student'; // سحب صلاحيات المعلم
-                $this->save();
-            }
+        if (! $subscription) {
             return false;
         }
 
-        if ($role) {
-            return $this->role === $role && $subscription && $subscription->active();
+        $isActive = $subscription->active() || $subscription->onGracePeriod();
+
+        if (! $isActive) {
+            return false;
         }
 
-        return $subscription && $subscription->active();
+        if ($audience) {
+            $plan = Plan::where('stripe_price_id', $subscription->stripe_price)->first();
+            return $plan && $plan->audience === $audience;
+        }
+
+        return true;
     }
+
     public function hasActiveCourseSubscription($courseId): bool
     {
         return $this->subscriptions()
@@ -103,3 +121,4 @@ class User extends Authenticatable
         return $this->courses()->where('course_id', $courseId)->exists();
     }
 }
+

@@ -59,6 +59,22 @@ class SubscriptionController extends Controller
      */
     public function success(Request $request)
     {
+        $user = Auth::user();
+
+        // الحصول على الاشتراك الجديد
+        $subscription = $user->subscription('default');
+
+        if ($subscription && $subscription->active()) {
+            // التحقق من نوع الخطة (معلم أو طالب)
+            $plan = Plan::where('stripe_price_id', $subscription->stripe_price)->first();
+
+            if ($plan && $plan->audience === 'teacher') {
+                // تحديث المستخدم ليصبح معلم
+                $user->role = 'teacher';
+                $user->save();
+            }
+        }
+
         return view('subscriptions.success');
     }
 

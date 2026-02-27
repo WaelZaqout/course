@@ -1,28 +1,7 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ملفي الشخصي - منصتي التعليمية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
-</head>
-
-<body>
-
-    <header>
-        <nav>
-            <a href="{{ route('site.home') }}" class="logo">🎓 منصتي</a>
-            <a href="{{ route('site.home') }}" class="back-btn">
-                <i class="fas fa-arrow-right"></i>
-                العودة للوحة التحكم
-            </a>
-        </nav>
-    </header>
-    <div class="container">
-        <div class="profile-container">
-            @include('profile.sidebar')
+@extends('profile.master')
+@section('title', 'ملفي الشخصي')
+@section('content')
+    <!-- Main Content -->
 
             <!-- Main Content -->
             <div class="main-content">
@@ -269,6 +248,5 @@
                 }, 500);
             });
         </script>
-</body>
 
-</html>
+@endsection

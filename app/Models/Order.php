@@ -15,11 +15,15 @@ class Order extends Model
         'provider_ref',
         'meta',
         'paid_at',
-        ];
+    ];
 
-        public function user(){
-            return $this->belongsTo(User::class);
-        }
+    protected $casts = [
+        'meta'    => 'array',
+        'paid_at' => 'datetime',
+    ];
 
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

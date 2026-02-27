@@ -21,13 +21,13 @@ class FrontController extends Controller
         $studentPlans = Plan::where('audience', 'student')->where('is_active', true)->orderBy('price')->get();
         $courses = Course::withCount('lessons')->get();
 
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         return view('index', compact('categories', 'aud', 'teacherPlans', 'studentPlans', 'courses'));
     }
 
     public function coursedetails($id)
     {
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
 
 
         // استدعاء الكورس بالـ id مع المدرس وعدد الدروس
@@ -38,16 +38,38 @@ class FrontController extends Controller
         return view('coursedetails', compact('categories', 'course'));
     }
 
-    public function courses()
+    public function courses(Request $request)
     {
-        $categories = Category::all();
-        $courses = Course::withCount('lessons')->get();
+        $categories = Category::query()->active()->get();
+        $coursesQuery = Course::withCount('lessons');
+
+        // Filter by category if provided
+        if ($request->has('category') && $request->category) {
+            $coursesQuery->where('category_id', $request->category);
+        }
+
+        // Search by title or summary if provided
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $coursesQuery->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('summary', 'like', '%' . $search . '%');
+            });
+        }
+
+        $courses = $coursesQuery->get();
+
+        if ($request->ajax()) {
+            $html = view('partials.courses_grid', compact('courses'))->render();
+            return response()->json(['html' => $html]);
+        }
 
         return view('courses', compact('categories', 'courses'));
     }
+
     public function lesson($id)
     {
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $course = Course::withCount('lessons')
             ->with('teacher')  // يجلب المدرس الصحيح
             ->findOrFail($id);
@@ -68,6 +90,7 @@ class FrontController extends Controller
             ->get()
             ->sum('completed_lessons');
 
+        $courses = Course::withCount('lessons')->get();
 
         $activeCourses = $u->courses()->count();
 
@@ -76,12 +99,15 @@ class FrontController extends Controller
             : 0;
 
         $learningHours = $completedLessons * 1.5; // مثال: كل درس = 1.5 ساعة
+        $categories = Category::query()->active()->get();
 
         return view('profile.profile', compact(
             'completedLessons',
             'activeCourses',
             'progressRate',
             'learningHours',
+            'categories',
+            'courses',
             'u'
         ));
     }

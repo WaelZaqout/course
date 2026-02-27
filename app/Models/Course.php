@@ -42,7 +42,7 @@ class Course extends Model
 
     public function lessons()
     {
-        return $this->hasManyThrough(Lesson::class, Course::class, 'teacher_id', 'course_id');
+        return $this->hasMany(Lesson::class);
     }
     public function sections()
     {
@@ -62,14 +62,6 @@ class Course extends Model
         return self::withCount('lessons')
             ->where('teacher_id', $teacherId)
             ->get();
-    }
-    public function publishedCourses()
-    {
-        return $this->courses()
-            ->with('category', 'teacher')
-            ->withCount('lessons')
-            ->whereNotNull('published_at')
-            ->latest();
     }
 
 }

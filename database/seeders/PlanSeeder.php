@@ -26,7 +26,7 @@ class PlanSeeder extends Seeder
                 'max_videos'      => 10,
                 'max_courses'     => 2,
                 'max_files'       => 20,
-                'stripe_price_id' => 'price_1S3HsfCuR5oL6l4VJlUHPeIJ',
+                'stripe_price_id' => 'price_1T5XR4AajKPiV5QnNyJ6iP4V',
             ]
         );
 
@@ -46,7 +46,7 @@ class PlanSeeder extends Seeder
                 'max_videos'      => 25,
                 'max_courses'     => 5,
                 'max_files'       => 50,
-                'stripe_price_id' => 'price_XXX_medium_teacher',
+                'stripe_price_id' => 'price_1T5XdYAajKPiV5Qn6peDzGAt',
             ]
         );
 
@@ -66,7 +66,7 @@ class PlanSeeder extends Seeder
                 'max_videos'      => 50,
                 'max_courses'     => 10,
                 'max_files'       => 100,
-                'stripe_price_id' => 'price_XXX_premium_teacher',
+                'stripe_price_id' => 'price_1T5XdtAajKPiV5QnyT9OWBQp',
             ]
         );
 

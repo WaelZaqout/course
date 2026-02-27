@@ -30,19 +30,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/settings',  [SettingsController::class,  'index'])->name('settings.index');
     Route::get('/messages',  [MessagesController::class,  'index'])->name('messages.index');
 
-    // التصنيفات (مثال كامل، فعّله عندك لو جاهز)
-    Route::get('categories',                  [CategoryController::class, 'index'])->name('categories.index');
-    Route::get('categories/create',           [CategoryController::class, 'create'])->name('categories.create');
-    Route::post('categories',                 [CategoryController::class, 'store'])->name('categories.store');
-    Route::get('categories/{category}',       [CategoryController::class, 'show'])->name('categories.show');
-    Route::get('categories/{category}/edit',  [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::put('categories/{category}',       [CategoryController::class, 'update'])->name('categories.update');
-    Route::delete('categories/{category}',    [CategoryController::class, 'destroy'])->name('categories.destroy');
-    Route::patch(
-        'categories/{category}/toggle-status',
-        [CategoryController::class, 'toggleStatus']
-    )->name('categories.toggle-active');
-    Route::get('categories/search',           [CategoryController::class, 'search'])->name('categories.search');
+    // التصنيفات
+    Route::get('categories',               [CategoryController::class, 'index'])->name('categories.index');
+    Route::post('categories',              [CategoryController::class, 'store'])->name('categories.store');
+    Route::put('categories/{category}',    [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::patch('categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])
+        ->name('categories.toggle-active');
 
     Route::middleware('permission:عرض المستخدمين')->group(function () {
         Route::resource('users', UserController::class);

@@ -12,7 +12,7 @@
 
         </div>
 
-        <a href="{{ route('categories.create') }}" class="add-button">
+        <a href="#" class="add-button">
             <i class="fas fa-plus"></i> إضافة قسم
         </a>
     </div>
@@ -95,7 +95,7 @@
                     <div class="form-group has-icon">
                         <label for="icon">Icon Class</label>
                         <input type="text" name="icon" id="icon" class="form-control"
-                            placeholder="مثال: fas fa-laptop-code" required>
+                               placeholder="مثال: fas fa-laptop-code" required>
                         @error('icon')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
@@ -206,6 +206,8 @@
 
         const nameInput = document.getElementById('name');
         const slugInput = document.getElementById('slug');
+        const iconInput = document.getElementById('icon');
+        const iconPreview = document.getElementById('icon_preview');
 
         // سنخزن المعرف هنا لو تعديل
         let currentCategoryId = null;
@@ -219,6 +221,10 @@
 
                 nameInput.value = data.name || '';
                 slugInput.value = data.slug || '';
+                iconInput.value = data.icon || '';
+                if (iconPreview) {
+                    iconPreview.className = `fa-2x ${data.icon || ''}`;
+                }
 
                 // تعبئة CKEditor عند التعديل
                 if (window.CKEDITOR && CKEDITOR.instances.editor) {
@@ -232,6 +238,9 @@
                 currentCategoryId = null;
 
                 categoryForm.reset();
+                if (iconPreview) {
+                    iconPreview.className = 'fa-2x';
+                }
                 // تفريغ CKEditor عند الإضافة
                 if (window.CKEDITOR && CKEDITOR.instances.editor) {
                     CKEDITOR.instances.editor.setData('');
@@ -287,19 +296,6 @@
             } else {
                 categoryForm.reportValidity();
             }
-        });
-    </script>
-    <script>
-        $(document).on('click', '.pagination a', function(e) {
-            e.preventDefault();
-            let page = $(this).attr('href').split('page=')[1];
-
-            $.ajax({
-                url: '?page=' + page,
-                success: function(data) {
-                    $('#tableData').html(data);
-                }
-            });
         });
     </script>
     <script>

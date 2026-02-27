@@ -32,7 +32,7 @@ class UpdateCourseRequest extends FormRequest
             'sale_price'    => 'nullable|numeric|min:0|lt:price',
             'currency'      => 'required|string|size:3',
             'is_published'  => 'boolean',
-            'cover'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'cover'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10000',
             'intro_video'   => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg|max:10240',
             'total_minutes' => 'nullable|integer|min:1',
             'published_at'  => 'nullable|date',

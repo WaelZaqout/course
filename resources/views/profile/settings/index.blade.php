@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+   @extends('profile.master')
+@section('title', 'ملفي الشخصي')
+@section('content')
+    <!-- Main Content -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الإعدادات - منصتي التعليمية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <style>
+   <style>
         .tabs .tab {
             cursor: pointer;
             display: inline-block;
@@ -63,21 +58,7 @@
             background: #d32f2f;
         }
     </style>
-</head>
 
-<body>
-    <header>
-        <nav>
-            <a href="{{ route('site.home') }}" class="logo">🎓 منصتي</a>
-            <a href="{{ route('site.home') }}" class="back-btn">
-                <i class="fas fa-arrow-right"></i> العودة للوحة التحكم
-            </a>
-        </nav>
-    </header>
-
-    <div class="container">
-        <div class="profile-container">
-            @include('profile.sidebar')
 
             <div class="main-content">
                 <div class="section-header">
@@ -177,11 +158,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 
     <!-- jQuery + AJAX -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
 
@@ -309,6 +288,4 @@
 
 
 
-</body>
-
-</html>
+@endsection

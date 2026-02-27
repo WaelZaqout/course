@@ -10,8 +10,14 @@ class Profile extends Model
         'user_id',
         'bio',
         'social',
-        ];
-        public function user(){
-            return $this->belongsTo(User::class);
-            }
+    ];
+
+    protected $casts = [
+        'social' => 'array',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

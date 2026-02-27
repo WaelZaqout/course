@@ -12,7 +12,16 @@ class Media extends Model
         'disk',
         'type',
         'size',
-        'meta'
-        ];
+        'meta',
+    ];
 
+    protected $casts = [
+        'meta' => 'array',
+        'size' => 'integer',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

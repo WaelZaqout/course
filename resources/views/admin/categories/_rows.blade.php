@@ -41,11 +41,16 @@
         </td>
         {{-- الإجراءات --}}
         <td class="actions">
-            <a href="#" class="edit-btn btn-action btn-edit" title="تعديل" data-id="{{ $category->id }}"
-                data-name="{{ $category->name }}" {{-- data-parent_id="{{ $category->parent_id }}" --}} data-slug="{{ $category->slug }}"
-                data-description="{{ $category->description }}" {{-- data-sort_order="{{ (int) $category->sort_order }}" --}}
-                data-is_active="{{ $category->is_active ? 1 : 0 }}"
-                data-update-url="{{ route('categories.update', $category->id) }}">
+            <a href="#"
+               class="edit-btn btn-action btn-edit"
+               title="تعديل"
+               data-id="{{ $category->id }}"
+               data-name="{{ $category->name }}"
+               data-slug="{{ $category->slug }}"
+               data-description="{{ $category->description }}"
+               data-icon="{{ $category->icon }}"
+               data-is_active="{{ $category->is_active ? 1 : 0 }}"
+               data-update-url="{{ route('categories.update', $category->id) }}">
                 <i class="fas fa-edit"></i>
             </a>
 

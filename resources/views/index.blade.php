@@ -8,8 +8,8 @@
                 <p>افتح عالمًا من المعرفة مع دوراتنا التعليمية المتميزة، مصممة خصيصًا لتلبية احتياجات الطلاب والمعلمين.
                 </p>
                 <div class="hero-buttons">
-                    @guest
-                        <button onclick="openStudentModal()" class="btn-primary highlight">سجل الآن</button>
+                @guest
+                        <button onclick="openSignupModal()" class="btn-primary highlight">سجل الآن</button>
                     @endguest
                     <a href="#courses" class="btn-secondary">تصفح المقررات</a>
                     <button class="btn-video" id="openVideoBtn"><i class="fas fa-play"></i> شاهد الفيديو
@@ -341,114 +341,5 @@
         </div>
     </footer>
 
-    <!-- Modals -->
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
 
-            <div class="modal-content">
-                <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
-                <h3 class="modal-title">تسجيل الدخول</h3>
-                <div class="form-group">
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" name="email" class="form-control" placeholder="أدخل بريدك الإلكتروني">
-                </div>
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" name="password" class="form-control" placeholder="أدخل كلمة المرور">
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" id="remember">
-                    <label for="remember">تذكرني</label>
-                </div>
-                <button type="submit" class="modal-btn">تسجيل الدخول</button>
-                <p class="modal-link">ليس لديك حساب؟ <a href="#" onclick="openSignupModal()">انشئ حساب</a></p>
-            </div>
-        </form>
-    </div>
-
-    <!-- Teacher Modal -->
-    <div id="teacherModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('teacherModal')">&times;</span>
-            <h3 class="modal-title">أنا معلم</h3>
-            <p style="text-align: center; margin-bottom: 24px;">أنشئ محتواك التعليمي وحقق دخلًا من مشاركته مع الطلاب.
-            </p>
-            <button onclick="openSignupModal('معلم')" class="modal-btn">إنشاء حساب كمعلم</button>
-            <button onclick="openLoginModal()" class="modal-btn"
-                style="background: white; color: #4f46e5; border: 2px solid #4f46e5;">تسجيل الدخول</button>
-        </div>
-    </div>
-
-    <!-- Student Modal -->
-    <div id="studentModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('studentModal')">&times;</span>
-            <h3 class="modal-title">أنا طالب</h3>
-            <p style="text-align: center; margin-bottom: 24px;">تعلم من أفضل المعلمين واختر الدروس التي تناسب احتياجاتك.
-            </p>
-            <button onclick="openSignupModal('طالب')" class="modal-btn">إنشاء حساب كطالب</button>
-            <button onclick="openLoginModal()" class="modal-btn"
-                style="background: white; color: #4f46e5; border: 2px solid #4f46e5;">تسجيل الدخول</button>
-        </div>
-    </div>
-    <!-- video Modal -->
-
-    <div id="videoModal" class="modalVideo">
-        <div class="modalVideo-content">
-            <span id="closeModal" class="close">&times;</span>
-            <iframe id="videoFrame" width="560" height="315" src="" frameborder="0"
-                allow="autoplay; encrypted-media" allowfullscreen>
-            </iframe>
-
-
-        </div>
-    </div>
-    <!-- Signup Modal -->
-    <div id="signupModal" class="modal">
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-            <div class="modal-content">
-                <span class="close-modal" onclick="closeModal('signupModal')">&times;</span>
-                <h3 class="modal-title">إنشاء حساب</h3>
-
-                <div class="form-group">
-                    <label>الاسم الكامل</label>
-                    <input type="text" name="name" class="form-control" placeholder="أدخل اسمك الكامل"
-                        value="{{ old('name') }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" name="email" class="form-control" placeholder="أدخل بريدك الإلكتروني"
-                        value="{{ old('email') }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" name="password" class="form-control" placeholder="أدخل كلمة المرور" required>
-                </div>
-
-                <div class="form-group">
-                    <label>تأكيد كلمة المرور</label>
-                    <input type="password" name="password_confirmation" class="form-control"
-                        placeholder="أعد إدخال كلمة المرور" required>
-                </div>
-
-                <div class="form-group">
-                    <label>نوع الحساب</label>
-                    <select name="role" id="accountType" class="form-control" required>
-                        <option value="student">طالب</option>
-                        <option value="teacher">معلم</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="modal-btn">إنشاء الحساب</button>
-
-                <p class="modal-link">لديك حساب بالفعل؟ <a href="#" onclick="openLoginModal()">تسجيل الدخول</a></p>
-            </div>
-        </form>
-
-    </div>
 @endsection

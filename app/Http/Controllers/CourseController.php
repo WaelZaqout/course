@@ -21,7 +21,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $teachers   = User::where('role', 'teacher')->get();
         $courses    = Course::forTeacher(Auth::id());
 
@@ -34,13 +34,13 @@ class CourseController extends Controller
     public function create()
     {
         $user = Auth::user();
-        if (!$user->hasActivePlan('teacher')) {
-            return redirect()->route('profile.home')
-                ->with('error', __('messages.teacher_plan_expired'));
-        }
+        // if (!$user->hasActivePlan('teacher')) {
+        //     return redirect()->route('profile.index')
+        //         ->with('error', __('messages.teacher_plan_expired'));
+        // }
 
         $teachers   = User::teachers();
-        $categories = Category::allCategories();
+        $categories = Category::query()->active()->get();
         $courses    = [];
 
         return view('profile.teachers.courses', compact('categories', 'teachers', 'courses'));
@@ -52,10 +52,10 @@ class CourseController extends Controller
     public function store(StoreCourseRequest $request)
     {
         $user = Auth::user();
-        if (!$user->hasActivePlan('teacher')) {
-            return redirect()->route('profile.home')
-                ->with('error', 'انتهت صلاحيات المعلم، يرجى تجديد الاشتراك.');
-        }
+        // if (!$user->hasActivePlan('teacher')) {
+        //     return redirect()->route('profile.index')
+        //         ->with('error', 'انتهت صلاحيات المعلم، يرجى تجديد الاشتراك.');
+        // }
 
         $data = $request->validated();
 
@@ -97,7 +97,7 @@ class CourseController extends Controller
             abort(403, 'ليس لديك صلاحية مشاهدة هذا الكورس.');
         }
 
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $teachers   = User::where('role', 'teacher')->get();
 
         return view('profile.teachers.coursedetails', compact('course', 'categories', 'teachers'));
@@ -113,7 +113,7 @@ class CourseController extends Controller
         }
 
         $teachers   = User::where('role', 'teacher')->get();
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
 
         return view('profile.teachers.courses', compact('course', 'categories', 'teachers'));
     }

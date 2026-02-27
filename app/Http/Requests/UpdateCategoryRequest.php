@@ -22,8 +22,8 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        // يجيب الموديل المربوط من المسار
-          $id = $this->route('category'); // هيرجع ID كـ int أو string
+        $category = $this->route('category');
+        $id = $category instanceof \App\Models\Category ? $category->id : $category;
 
         return [
             'name'        => ['required','string','max:255'],
@@ -32,7 +32,7 @@ class UpdateCategoryRequest extends FormRequest
                 Rule::unique('categories', 'slug')->ignore($id),
             ],
             'description' => ['nullable','string'],
-            'status'      => ['nullable','boolean'],
+            'is_active'   => ['nullable','boolean'],
         ];
     }
 }

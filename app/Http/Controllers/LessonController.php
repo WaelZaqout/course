@@ -21,7 +21,7 @@ class LessonController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $lessons    = Lesson::all();
         $courses    = Course::all();
         $sections   = Section::all();
@@ -33,7 +33,7 @@ class LessonController extends Controller
      */
     public function create(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $lesson     = new Lesson();
         $courses    = Course::all();
         $sections = [];
@@ -120,7 +120,7 @@ class LessonController extends Controller
      */
     public function edit(Lesson $lesson)
     {
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $courses    = Course::all();
         $sections = Section::where('course_id', $lesson->course_id)->get();
 

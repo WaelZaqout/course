@@ -797,12 +797,13 @@
         border: 1px solid #4a90e2;
     }
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
+   .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 أعمدة ثابتة */
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
 
     .stat-card {
         background: #f8f9fa;
@@ -877,3 +878,81 @@
     .slider.round:before {
         border-radius: 50%;
     }
+/* coursedetails */
+ .lesson-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lesson-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lesson-toggle {
+            font-size: 14px;
+            color: #666;
+            transition: transform 0.3s ease;
+        }
+
+        .lesson-content {
+            display: none;
+            margin-top: 12px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .lesson-meta {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .preview-badge {
+            color: green;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .btn-primary {
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: #6c63ff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* endcourse */

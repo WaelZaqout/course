@@ -19,7 +19,7 @@ class TeacherController extends Controller
 
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $teachers   = User::where('role', 'teacher')->get();
 
         // عرض الكورسات الخاصة بالمعلم الحالي فقط
@@ -37,7 +37,7 @@ class TeacherController extends Controller
     {
         $user = auth()->user();
         if (!$user->hasActivePlan('teacher')) {
-            return redirect()->route('profile.home')
+            return redirect()->route('profile.index')
                 ->with('error', 'انتهت صلاحيات المعلم، يرجى تجديد الاشتراك.');
         }
 
@@ -55,7 +55,7 @@ class TeacherController extends Controller
     {
         $user = auth()->user();
         if (!$user->hasActivePlan('teacher')) {
-            return redirect()->route('profile.home')
+            return redirect()->route('profile.index')
                 ->with('error', 'انتهت صلاحيات المعلم، يرجى تجديد الاشتراك.');
         }
 
@@ -95,7 +95,7 @@ class TeacherController extends Controller
             abort(403, 'ليس لديك صلاحية مشاهدة هذا الكورس.');
         }
 
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
         $teachers   = User::where('role', 'teacher')->get();
 
         return view('profile.teachers.coursedetails', compact('course', 'categories', 'teachers'));

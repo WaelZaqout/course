@@ -16,7 +16,7 @@ class PlanController extends Controller
 
         $user = auth()->user();
         $aud  = $request->get('aud') ?: ($user?->hasRole('teacher') ? 'teacher' : 'student');
-        $categories = Category::all();
+        $categories = Category::query()->active()->get();
 
         $teacherPlans = Plan::where('audience', 'teacher')->where('is_active', true)->orderBy('price')->get();
         $studentPlans = Plan::where('audience', 'student')->where('is_active', true)->orderBy('price')->get();

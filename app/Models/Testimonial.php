@@ -12,8 +12,13 @@ class Testimonial extends Model
         'author_role',
         'rating',
         'body',
-        'featured'
+        'featured',
     ];
+
+    protected $casts = [
+        'featured' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

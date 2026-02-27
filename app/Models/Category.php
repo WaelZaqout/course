@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-
     protected $fillable = [
         'name',
         'parent_id',
@@ -17,32 +16,25 @@ class Category extends Model
         'icon',
     ];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
     public function courses()
     {
         return $this->hasMany(Course::class);
     }
-    public static function index()
-    {
-        return self::orderBy('created_at', 'desc')->paginate(10);
-    }
 
-    public static function active()
-    {
-        return self::where('status', 'active')->get();
-    }
-
-    public function publishedPosts($perPage = 10)
-    {
-        return $this->posts()
-            ->where('status', 'published')
-            ->latest()
-            ->paginate($perPage);
-    }
-
-    public static function NewsCategory($slug)
-    {
-        return self::where('slug', $slug)->firstOrFail();
-    }
     public function scopeSearch($query, ?string $term)
     {
         $term = trim((string) $term);
@@ -52,36 +44,20 @@ class Category extends Model
 
         $like = "%{$term}%";
 
-        return $query->where(function ($qq) use ($like, $term) {
-            // دعم بحث الحالة بالعربي أيضاً (اختياري)
-            $statusNormalized = null;
-            if (in_array($term, ['نشط', 'is_active'], true)) {
-                $statusNormalized = 'is_active';
-            } elseif (in_array($term, ['غير نشط', 'inactive'], true)) {
-                $statusNormalized = 'inactive';
-            }
-
+        return $query->where(function ($qq) use ($like) {
             $qq->where('name', 'like', $like)
                 ->orWhere('slug', 'like', $like)
                 ->orWhere('description', 'like', $like);
-
-            if ($statusNormalized) {
-                $qq->orWhere('status', $statusNormalized);
-            } else {
-                $qq->orWhere('status', 'like', $like);
-            }
         });
     }
 
-    /**
-     * scopeOrdered: ترتيب افتراضي
-     */
     public function scopeOrdered($query)
     {
         return $query->orderByDesc('id');
     }
-    public static function allCategories()
+
+    public function scopeActive($query)
     {
-        return self::all();
+        return $query->where('is_active', true);
     }
 }

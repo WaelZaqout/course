@@ -25,8 +25,18 @@ class Enrollment extends Model
         return $this->belongsTo(Course::class);
     }
 
+    /**
+     * الدروس التابعة للكورس المشترك فيه (عبر الجدول الوسيط courses)
+     */
     public function lessons()
     {
-        return $this->hasManyThrough(Lesson::class, Course::class, 'teacher_id', 'course_id');
+        return $this->hasManyThrough(
+            Lesson::class,
+            Course::class,
+            'id',           // مفتاح الجدول الوسيط (courses) الذي يشير إليه enrollment
+            'course_id',    // مفتاح lessons الذي يشير إلى courses
+            'course_id',    // مفتاح enrollment المحلي
+            'id'
+        );
     }
 }

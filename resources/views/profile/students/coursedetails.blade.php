@@ -1,137 +1,7 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تفاصيل الكورس - منصتي التعليمية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: #f9f9f9;
-        }
-
-        .course-details {
-            max-width: 1000px;
-            margin: auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .course-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .course-header h2 {
-            font-size: 26px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .course-summary {
-            font-size: 15px;
-            color: #555;
-            line-height: 1.8;
-        }
-
-        /* كروت الدروس */
-        .lesson-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 15px;
-            border: 1px solid #eee;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .lesson-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-        }
-
-        .lesson-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .lesson-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .lesson-toggle {
-            font-size: 14px;
-            color: #666;
-            transition: transform 0.3s ease;
-        }
-
-        .lesson-content {
-            display: none;
-            margin-top: 12px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .lesson-meta {
-            margin-top: 8px;
-            font-size: 14px;
-            color: #777;
-        }
-
-        .preview-badge {
-            color: green;
-            font-weight: bold;
-            margin-right: 6px;
-        }
-
-        .btn-primary {
-            padding: 8px 16px;
-            border-radius: 10px;
-            background: #6c63ff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <header>
-        <nav>
-            <a href="{{ route('site.home') }}" class="logo">🎓 منصتي</a>
-            <a href="{{ route('site.home') }}" class="back-btn">
-                <i class="fas fa-arrow-right"></i> العودة للوحة التحكم
-            </a>
-        </nav>
-    </header>
-
-    <div class="container">
-        <div class="profile-container">
-            @include('profile.sidebar')
+@extends('profile.master')
+@section('title', 'ملفي الشخصي')
+@section('content')
+    <!-- Main Content -->
 
             <!-- Main Content -->
             <div class="main-content">
@@ -227,11 +97,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
 
     <!-- Modal إضافة درس -->
-    @include('profile.teachers.addlesson')
 
     <script>
         function openModal() {
@@ -294,7 +162,4 @@
             }
         }
     </script>
-
-</body>
-
-</html>
+@endsection

@@ -132,7 +132,7 @@ class UserController extends Controller
             ->route('users.index')
             ->with('toast', [
                 'type' => 'success',
-                'message' => 'تم حذف القسم بنجاح'
+                'message' => 'تم حذف المستخدم بنجاح'
             ]);
     }
     protected function syncRoleColumn(User $user): void

@@ -21,4 +21,11 @@ class SectionController extends Controller
 
         return back()->with('success', 'تمت إضافة السكشن بنجاح ✅');
     }
+
+    public function destroy(Section $section)
+    {
+        $section->delete();
+        return back()->with('success', 'تم حذف السكشن بنجاح ✅');
+    }
 }
+

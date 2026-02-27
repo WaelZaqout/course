@@ -42,6 +42,6 @@
     </tr>
 @empty
     <tr>
-        <td colspan="12" class="text-center text-muted">لا توجد بيانات أساتذة.</td>
+        <td colspan="12" class="text-center text-muted">لا توجد بيانات طلاب.</td>
     </tr>
 @endforelse

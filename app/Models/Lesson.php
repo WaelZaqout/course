@@ -36,10 +36,6 @@ class Lesson extends Model
     {
         return $this->belongsTo(Section::class, 'section_id');
     }
-        public function enrollment()
-    {
-        return $this->hasMany(Enrollment::class);
-    }
     protected $casts = [
         'free_preview'   => 'boolean',
         'live_starts_at' => 'datetime',
@@ -56,7 +52,8 @@ class Lesson extends Model
         $minutes = floor(($this->duration_sec % 3600) / 60);
 
         if ($hours > 0) {
-            return $hours . ' ساعة' . ($hours > 1 ? 's' : '') . ($minutes > 0 ? " و $minutes دقيقة" : '');
+            $hourLabel = $hours === 1 ? 'ساعة' : ($hours === 2 ? 'ساعتين' : $hours . ' ساعات');
+            return $hourLabel . ($minutes > 0 ? " و $minutes دقيقة" : '');
         }
 
         return $minutes . ' دقيقة';

@@ -1,6 +1,6 @@
 @extends('admin.master')
 @section('content')
-@section('title', 'إدارة الأقسام')
+@section('title', 'إدارة الطلاب')
 
 
 <div class="container">
@@ -41,13 +41,13 @@
                 </tr>
 
             </thead>
-            <tbody id="teachersTbody">
+            <tbody id="studentsTbody">
                 @include('admin.students._rows', ['students' => $students])
             </tbody>
 
-            {{-- <div id="teachersPagination" class="mt-3">
+            <div id="studentsPagination" class="mt-3">
                 {{ $students->links() }}
-            </div> --}}
+            </div>
 
 
         </table>
@@ -57,125 +57,12 @@
 
 
 
-<!-- Responsive Modal -->
-
-
 @section('js')
-    <script>
-        // عناصر المودال والحقول
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalTitle = document.getElementById('modalTitle');
-        const teacherForm = document.getElementById('teacherForm');
-        const methodSpoof = document.getElementById('methodSpoof');
-
-        const openModalBtn = document.querySelector('.add-button');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const saveBtn = document.getElementById('saveBtn');
-
-        const nameInput = document.getElementById('name');
-        const slugInput = document.getElementById('slug');
-
-        // سنخزن المعرف هنا لو تعديل
-        let currentCategoryId = null;
-
-        function openModal(editMode = false, data = null) {
-            modalOverlay.classList.add('active');
-
-            if (editMode && data) {
-                modalTitle.textContent = 'تعديل القسم';
-                currentCategoryId = data.id;
-
-                nameInput.value = data.name || '';
-                slugInput.value = data.slug || '';
-
-                // تعبئة CKEditor عند التعديل
-                if (window.CKEDITOR && CKEDITOR.instances.editor) {
-                    CKEDITOR.instances.editor.setData(data.description || '');
-                }
-
-                teacherForm.action = data.updateUrl;
-                methodSpoof.value = 'PUT';
-            } else {
-                modalTitle.textContent = 'إضافة قسم جديد';
-                currentCategoryId = null;
-
-                teacherForm.reset();
-                // تفريغ CKEditor عند الإضافة
-                if (window.CKEDITOR && CKEDITOR.instances.editor) {
-                    CKEDITOR.instances.editor.setData('');
-                }
-
-                teacherForm.action = "";
-                methodSpoof.value = '';
-            }
-        }
-
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-        }
-
-        // زر إضافة: مودال فارغ
-        openModalBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(false, null);
-        });
-
-        // أزرار تعديل: مودال معبأ + action/updateUrl
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const data = {
-                    id: btn.dataset.id,
-                    name: btn.dataset.name,
-                    slug: btn.dataset.slug,
-                    description: btn.dataset.description,
-                    status: btn.dataset.status,
-                    updateUrl: btn.dataset.updateUrl // تأكد إضافتها في Blade
-                };
-                openModal(true, data);
-            });
-        });
-
-        // إغلاق
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
-        });
-
-        // حفظ: submit فعلي
-        saveBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // مزامنة CKEditor مع textarea قبل الإرسال
-            if (window.CKEDITOR && CKEDITOR.instances.editor) {
-                CKEDITOR.instances.editor.updateElement();
-            }
-            if (teacherForm.checkValidity()) {
-                teacherForm.submit();
-            } else {
-                teacherForm.reportValidity();
-            }
-        });
-    </script>
-    <script>
-        $(document).on('click', '.pagination a', function(e) {
-            e.preventDefault();
-            let page = $(this).attr('href').split('page=')[1];
-
-            $.ajax({
-                url: '?page=' + page,
-                success: function(data) {
-                    $('#tableData').html(data);
-                }
-            });
-        });
-    </script>
     <script>
         (function() {
             const input = document.getElementById('searchByName');
-            const tbody = document.getElementById('teachersTbody');
-            const pagerBox = document.getElementById('categoriesPagination');
+            const tbody = document.getElementById('studentsTbody');
+            const pagerBox = document.getElementById('studentsPagination');
             const baseIndex = "{{ route('students.index') }}";
 
             let timer = null;

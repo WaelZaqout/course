@@ -1,136 +1,110 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+@extends('profile.master')
+@section('title', 'ملفي الشخصي')
+@section('content')
+    <!-- Main Content -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ملفي الشخصي - منصتي التعليمية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
-</head>
+    <div class="main-content">
+        <div id="profile" class="tab-content active">
+            <div class="section-header d-flex justify-content-between align-items-center">
+                <h2 class="section-title">كورساتي</h2>
+                @php
+                    // ✅ لتجاوز شرط الاشتراك مؤقتًا للاختبار
+                    $canAddCourse = true;
+                @endphp
 
-<body>
-
-    <header>
-        <nav>
-            <a href="{{ route('site.home') }}" class="logo">🎓 منصتي</a>
-            <a href="{{ route('site.home') }}" class="back-btn">
-                <i class="fas fa-arrow-right"></i>
-                العودة للوحة التحكم
-            </a>
-        </nav>
-    </header>
-    <div class="container">
-        <div class="profile-container">
-            @include('profile.sidebar')
-
-            <!-- Main Content -->
-            <div class="main-content">
-                <div id="profile" class="tab-content active">
-                    <div class="section-header d-flex justify-content-between align-items-center">
-                        <h2 class="section-title">كورساتي</h2>
-                        @php
-                            $canAddCourse = auth()->user()->hasActivePlan('teacher');
-                        @endphp
-
-                        @if ($canAddCourse)
-                            <!-- لو عنده اشتراك فعال -->
-                            <button class="add-btn" onclick="openEditModal('profile')">
-                                <i class="fas fa-add"></i> اضافة كورس
-                            </button>
-                        @else
-                            <!-- لو ما عنده اشتراك -->
-                            <a href="{{ route('plans.index', ['aud' => 'teacher']) }}" class="add-btn">
-                                <i class="fas fa-crown"></i> اشترك الآن
-                            </a>
-                        @endif
-
-
-
-                    </div>
-
-                    <!-- Grid of Courses -->
-                    <div class="courses-grid"
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top:20px;">
-                        @forelse($courses as $course)
-                            <div class="course-card"
-                                style="background:#fff; border-radius:20px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden; transition:.3s;">
-
-                                <!-- صورة الكورس -->
-                                <div class="course-image"
-                                    style="position:relative; width:100%; height:200px; overflow:hidden;">
-                                    <img src="{{ $course->cover ? asset('storage/' . $course->cover) : asset('images/default-course.jpg') }}"
-                                        alt="{{ $course->title }}"
-                                        style="width:100%; height:100%; object-fit:cover; display:block; border-radius:15px 15px 0 0;">
-
-                                    <!-- شارة الأكثر مبيعًا -->
-                                    <span
-                                        style="position:absolute; top:10px; left:10px; background:#4CAF50; color:white;
-                                           padding:5px 12px; font-size:13px; border-radius:8px; font-weight:bold;">
-                                        الأكثر مبيعًا
-                                    </span>
-                                </div>
-
-                                <!-- التفاصيل -->
-                                <div class="course-content" style="padding:15px; text-align:right;">
-
-                                    <!-- الفئة -->
-                                    <span class="badge"
-                                        style="background:#e0d7ff; color:#6c63ff; padding:3px 12px; border-radius:12px; font-size:13px; width: 20%;">
-                                        {{ $course->category->name ?? 'بدون تصنيف' }}
-                                    </span>
-
-                                    <!-- العنوان -->
-                                    <h3 style="margin:12px 0; font-size:20px; font-weight:700; color:#222;">
-                                        {{ $course->title }}
-                                    </h3>
-
-                                    <!-- الملخص -->
-                                    <p style="font-size:14px; color:#555; line-height:1.6; margin-bottom:10px;">
-                                        {{ Str::limit($course->summary, 80) }}
-                                    </p>
-
-                                    <!-- عدد المسجلين + التقييم -->
-                                    <div style="font-size:14px; color:#777; margin-bottom:8px;">
-                                        {{ $course->students_count ?? '0' }} مسجل
-                                        <span style="color:#FFD700; margin-left:5px;">★★★★★</span>
-                                    </div>
-
-                                    <!-- عدد الدروس والمدة -->
-                                    <div
-                                        style="display:flex; justify-content:space-between; font-size:14px; color:#444; margin-bottom:12px;">
-                                        <span>📘 {{ $course->lessons_count ?? 0 }} درس</span>
-                                        <span>⏰ {{ $course->total_minutes ?? 'غير محدد' }} ساعة</span>
-                                    </div>
-
-                                    <!-- السعر وزر -->
-                                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                                        <span style="font-size:18px; font-weight:700; color:#4CAF50;">
-                                            {{ $course->price }} ر.س
-                                        </span>
-                                        <a href="{{ route('profile.courses.show', $course->id) }}"
-                                            style="background:#6c63ff; color:white; padding:8px 15px; border-radius:10px;
-                                                 text-decoration:none; font-size:14px;">
-                                            تفاصيل الكورس
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <p>لا يوجد كورسات حتى الآن.</p>
-                        @endforelse
-                    </div>
-
-                </div>
+                @if ($canAddCourse)
+                    <!-- السماح بإنشاء الكورسات دائمًا -->
+                    <button class="add-btn" onclick="openEditModal('profile')">
+                        <i class="fas fa-add"></i> اضافة كورس
+                    </button>
+                @else
+                    <!-- هذا لن يظهر لأن $canAddCourse = true -->
+                    <a href="{{ route('plans.index', ['aud' => 'teacher']) }}" class="add-btn">
+                        <i class="fas fa-crown"></i> اشترك الآن
+                    </a>
+                @endif
             </div>
+
+            <!-- Grid of Courses -->
+            <div class="courses-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top:20px;">
+                @forelse($courses as $course)
+                    <div class="course-card"
+                        style="background:#fff; border-radius:20px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden; transition:.3s;">
+
+                        <!-- صورة الكورس -->
+                        <div class="course-image" style="position:relative; width:100%; height:200px; overflow:hidden;">
+                            <img src="{{ $course->cover ? asset('storage/' . $course->cover) : asset('images/default-course.jpg') }}"
+                                alt="{{ $course->title }}"
+                                style="width:100%; height:100%; object-fit:cover; display:block; border-radius:15px 15px 0 0;">
+
+                            <!-- شارة الأكثر مبيعًا -->
+                            <span
+                                style="position:absolute; top:10px; left:10px; background:#4CAF50; color:white;
+                                           padding:5px 12px; font-size:13px; border-radius:8px; font-weight:bold;">
+                                الأكثر مبيعًا
+                            </span>
+                        </div>
+
+                        <!-- التفاصيل -->
+                        <div class="course-content" style="padding:15px; text-align:right;">
+
+                            <!-- الفئة -->
+                            <span class="badge"
+                                style="background:#e0d7ff; color:#6c63ff; padding:3px 12px; border-radius:12px; font-size:13px; width: 20%;">
+                                {{ $course->category->name ?? 'بدون تصنيف' }}
+                            </span>
+
+                            <!-- العنوان -->
+                            <h3 style="margin:12px 0; font-size:20px; font-weight:700; color:#222;">
+                                {{ $course->title }}
+                            </h3>
+
+                            <!-- الملخص -->
+                            <p style="font-size:14px; color:#555; line-height:1.6; margin-bottom:10px;">
+                                {{ Str::limit($course->summary, 80) }}
+                            </p>
+
+                            <!-- عدد المسجلين + التقييم -->
+                            <div style="font-size:14px; color:#777; margin-bottom:8px;">
+                                {{ $course->students_count ?? '0' }} مسجل
+                                <span style="color:#FFD700; margin-left:5px;">★★★★★</span>
+                            </div>
+
+                            <!-- عدد الدروس والمدة -->
+                            <div
+                                style="display:flex; justify-content:space-between; font-size:14px; color:#444; margin-bottom:12px;">
+                                <span>📘 {{ $course->lessons_count ?? 0 }} درس</span>
+                                <span>⏰ {{ $course->total_minutes ?? 'غير محدد' }} ساعة</span>
+                            </div>
+
+                            <!-- السعر وزر -->
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-size:18px; font-weight:700; color:#4CAF50;">
+                                    {{ $course->price }} ر.س
+                                </span>
+                                <a href="{{ route('profile.courses.show', $course->id) }}"
+                                    style="background:#6c63ff; color:white; padding:8px 15px; border-radius:10px;
+                                                 text-decoration:none; font-size:14px;">
+                                    تفاصيل الكورس
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p>لا يوجد كورسات حتى الآن.</p>
+                @endforelse
+            </div>
+
         </div>
+    </div>
 
 
-        <!-- Hidden file input -->
-        <input type="file" id="avatar-upload" accept="image/*">
-        @include('profile.teachers.addcourse')
-
+    <!-- Hidden file input -->
+    <input type="file" id="avatar-upload" accept="image/*">
+    @include('profile.teachers.addcourse')
+    @section('scripts')
         <script>
             // Tab navigation
             function showTab(tabId) {
@@ -287,6 +261,5 @@
                 }, 500);
             });
         </script>
-</body>
-
-</html>
+    @endsection
+@endsection

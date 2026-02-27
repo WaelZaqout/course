@@ -30,7 +30,7 @@ class StoreCourseRequest extends FormRequest
             'price'         => 'required|numeric|min:0',
             'sale_price'    => 'nullable|numeric|min:0|lt:price',
             'is_published'  => 'boolean',
-            'cover'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'cover'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10000',
             'intro_video'   => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg|max:10240',
             'total_minutes' => 'nullable|integer|min:1',
             'published_at'  => 'nullable|date',
@@ -48,5 +48,20 @@ class StoreCourseRequest extends FormRequest
             'price.required'       => 'سعر الكورس مطلوب.',
             'sale_price.lt'        => 'سعر الخصم يجب أن يكون أقل من السعر الأصلي.',
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($validator->errors()->any()) {
+                session()->flash('toast', [
+                    'type' => 'error',
+                    'message' => 'يرجى التحقق من البيانات المدخلة'
+                ]);
+            }
+        });
     }
 }

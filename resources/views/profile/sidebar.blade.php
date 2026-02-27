@@ -47,8 +47,6 @@
                 الملف الشخصي
             </a>
         </li>
-
-
         {{-- كورساتي (للمعلم) --}}
         @role('teacher')
             @can('إنشاء دورة')
@@ -96,7 +94,8 @@
         @endrole
 
         <li class="nav-item">
-            <a href="{{ route('profile.settings.index') }}" data-tab="settings" class="nav-link">
+            <a href="{{ route('profile.settings.index') }}"
+                class="nav-link {{ request()->routeIs('profile.settings.index') ? 'active' : '' }}">
                 <i class="fas fa-cog"></i>
                 الإعدادات
             </a>

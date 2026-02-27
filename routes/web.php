@@ -6,21 +6,23 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\PlanController;        // الباقات
 use App\Http\Controllers\CourseController;      // الكورسات
 use App\Http\Controllers\ProfileController;     // البروفايل
 use App\Http\Controllers\FrontController;       // صفحات عامة
 use App\Http\Controllers\SubscriptionController; // الاشتراكات
-use App\Http\Controllers\StudentsController;    // واجهة الطالب
 use App\Http\Controllers\TeacherController;     // واجهة المعلم
 
 // =====================
 // صفحات عامة (بدون تسجيل)
 // =====================
 
+
+
 Route::get('/',              [FrontController::class, 'index'])->name('site.home');
+
 Route::get('/courses',       [FrontController::class, 'courses'])->name('courses');
+
 Route::get('/coursedetails', [FrontController::class, 'coursedetails'])->name('details');
 Route::get('/coursedetails/{id}', [FrontController::class, 'coursedetails'])->name('coursedetails');
 Route::get('/lesson', [FrontController::class, 'lesson'])->name('lessons.list'); // قائمة الدروس
@@ -102,6 +104,14 @@ Route::middleware(['auth', 'role:student', 'subscribed:student'])->group(functio
 });
 
 // =====================
+// Stripe Webhook
+// =====================
+Route::post('/stripe/webhook', [\Laravel\Cashier\Http\Controllers\WebhookController::class, 'handleWebhook'])
+    ->name('stripe.webhook')
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+// =====================
 // مصادقة (Breeze/Fortify/UI)
 // =====================
+
 require __DIR__ . '/auth.php';

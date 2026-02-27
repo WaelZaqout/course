@@ -130,8 +130,6 @@
                             </div>
                         </div>
 
-
-
                         <!-- Trust Badges -->
                         <div class="trust-badges">
                             <div class="badge">

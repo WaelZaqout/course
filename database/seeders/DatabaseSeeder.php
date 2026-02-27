@@ -19,13 +19,13 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
         ]);
 
-        // Create admin user and assign the admin role
-        // $adminUser = User::factory()->create([
-        //     'name' => 'wael zaqout',
-        //     'email' => 'wael@gmail.com',
-        //     'password' => bcrypt('password'),
-        // ]);
-        // Assign the admin role using Spatie Permission
-        // $adminUser->assignRole('admin');
+    //     // Create admin user and assign the admin role
+    //     $adminUser = User::factory()->create([
+    //         'name' => 'wael zaqout',
+    //         'email' => 'wael@gmail.com',
+    //         'password' => bcrypt('password'),
+    //     ]);
+    //     // Assign the admin role using Spatie Permission
+    //     $adminUser->assignRole('admin');
     }
 }

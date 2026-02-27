@@ -11,15 +11,21 @@ class Progress extends Model
         'lesson_id',
         'status',
         'last_watched_sec',
-        'completed_at'
-        ];
-        public function user(){
-            return $this->belongsTo(User::class);
-        }
-        public function lesson(){
-            return $this->belongsTo(Lesson::class);
-        }
+        'completed_at',
+    ];
 
+    protected $casts = [
+        'last_watched_sec' => 'integer',
+        'completed_at'     => 'datetime',
+    ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class);
+    }
 }

@@ -399,264 +399,83 @@
     </style>
 
     <div class="container">
-      <div class="section">
+        <div class="section">
             <h1>📚 المقررات التعليمية</h1>
             <p>اكتشف أفضل الدورات التعليمية في مختلف المجالات وطور مهاراتك مع أفضل المدربين</p>
         </div>
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-box" placeholder="ابحث عن مقرر دراسي...">
-        </div>
+        <form method="GET" action="{{ route('courses') }}" id="filterForm">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="search" class="search-box" placeholder="ابحث عن مقرر دراسي..." value="{{ request('search') }}">
+                <button type="submit" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted-text); cursor: pointer;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
 
-        <div class="filters">
-            <button class="filter-btn active">الكل</button>
-            <button class="filter-btn">البرمجة</button>
-            <button class="filter-btn">التصميم</button>
-            <button class="filter-btn">التسويق</button>
-            <button class="filter-btn">اللغات</button>
-            <button class="filter-btn">الأعمال</button>
-        </div>
+            <div class="filters">
+                <button type="submit" name="category" value="" class="filter-btn {{ !request('category') ? 'active' : '' }}">الكل</button>
+                @foreach ($categories as $category)
+                    <button type="submit" name="category" value="{{ $category->id }}" class="filter-btn {{ request('category') == $category->id ? 'active' : '' }}">{{ $category->name }}</button>
+                @endforeach
+            </div>
+        </form>
 
         <div class="courses-grid" id="coursesGrid">
-            <!-- سيتم تعبئة المقررات هنا باستخدام JavaScript -->
+            @include('partials.courses_grid')
         </div>
     </div>
-@section('js')
-    <script>
-        // بيانات المقررات الدراسية
-        const courses = [
-            {
-                id: 1,
-                title: "أساسيات البرمجة وعلوم الحاسوب",
-                instructor: "د. أحمد محمد",
-                duration: "12 أسبوع",
-                students: 2450,
-                rating: 4.8,
-                price: "99",
-                image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                category: "البرمجة",
-                progress: 75,
-                modules: [
-                    { title: "مقدمة إلى علوم الحاسوب", duration: "2h 30m" },
-                    { title: "أساسيات البرمجة", duration: "4h 15m" },
-                    { title: "هياكل البيانات", duration: "3h 45m" },
-                    { title: "الخوارزميات", duration: "5h 20m" }
-                ]
-            },
-            {
-                id: 2,
-                title: "تصميم الجرافيك الاحترافي",
-                instructor: "سارة خالد",
-                duration: "8 أسبوع",
-                students: 1890,
-                rating: 4.9,
-                price: "149",
-                image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                category: "التصميم",
-                progress: 100,
-                modules: [
-                    { title: "مقدمة في التصميم", duration: "1h 45m" },
-                    { title: "أدوبي فوتوشوب", duration: "6h 30m" },
-                    { title: "أدوبي إليستريتور", duration: "7h 15m" },
-                    { title: "الهوية البصرية", duration: "4h 20m" }
-                ]
-            },
-            {
-                id: 3,
-                title: "التسويق الرقمي الشامل",
-                instructor: "محمد علي",
-                duration: "10 أسبوع",
-                students: 3200,
-                rating: 4.7,
-                price: "0",
-                image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                category: "التسويق",
-                progress: 45,
-                modules: [
-                    { title: "مقدمة في التسويق الرقمي", duration: "2h 10m" },
-                    { title: "تسويق محركات البحث (SEO)", duration: "5h 25m" },
-                    { title: "إعلانات جوجل", duration: "4h 40m" },
-                    { title: "التسويق عبر وسائل التواصل", duration: "6h 15m" }
-                ]
-            },
-            {
-                id: 4,
-                title: "تعلم اللغة الإنجليزية من الصفر",
-                instructor: "نادية حسن",
-                duration: "16 أسبوع",
-                students: 4500,
-                rating: 4.9,
-                price: "79",
-                image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                category: "اللغات",
-                progress: 30,
-                modules: [
-                    { title: "القواعد الأساسية", duration: "3h 20m" },
-                    { title: "المفردات اليومية", duration: "4h 15m" },
-                    { title: "المحادثة العملية", duration: "6h 30m" },
-                    { title: "فهم المسموع", duration: "5h 45m" }
-                ]
-            },
-            {
-                id: 5,
-                title: "ريادة الأعمال والمشاريع الناشئة",
-                instructor: "خالد عبد الله",
-                duration: "6 أسبوع",
-                students: 1560,
-                rating: 4.6,
-                price: "129",
-                image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                category: "الأعمال",
-                progress: 60,
-                modules: [
-                    { title: "فكرة المشروع", duration: "2h 45m" },
-                    { title: "خطة العمل", duration: "3h 30m" },
-                    { title: "التمويل والتمويل الجماعي", duration: "4h 15m" },
-                    { title: "النمو والتوسع", duration: "3h 50m" }
-                ]
-            },
-            {
-                id: 6,
-                title: "تطوير تطبيقات الموبايل باستخدام Flutter",
-                instructor: "ياسمين سامي",
-                duration: "14 أسبوع",
-                students: 1980,
-                rating: 4.8,
-                price: "179",
-                image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                category: "البرمجة",
-                progress: 85,
-                modules: [
-                    { title: "مقدمة في Flutter", duration: "3h 10m" },
-                    { title: "واجهات المستخدم", duration: "5h 45m" },
-                    { title: "إدارة الحالة", duration: "4h 20m" },
-                    { title: "نشر التطبيق", duration: "3h 30m" }
-                ]
-            }
-        ];
-
-        // عرض المقررات
-        function renderCourses(coursesToRender) {
-            const coursesGrid = document.getElementById('coursesGrid');
-            coursesGrid.innerHTML = '';
-
-            coursesToRender.forEach((course, index) => {
-                setTimeout(() => {
-                    const courseElement = document.createElement('div');
-                    courseElement.className = 'course-card animate-in';
-                    courseElement.style.animationDelay = `${index * 0.1}s`;
-
-                    courseElement.innerHTML = `
-                        <div class="course-image">
-                            <img src="${course.image}" alt="${course.title}">
-                            <span class="course-badge">${course.category}</span>
-                        </div>
-                        <div class="course-content">
-                            <h3 class="course-title">${course.title}</h3>
-                            <div class="course-instructor">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                                ${course.instructor}
-                            </div>
-
-                            <div class="course-info">
-                                <div class="info-item">
-                                    <i class="fas fa-clock"></i>
-                                    ${course.duration}
-                                </div>
-                                <div class="info-item">
-                                    <i class="fas fa-users"></i>
-                                    ${course.students.toLocaleString()} طالب
-                                </div>
-                            </div>
-
-                            <div class="modules">
-                                <div class="modules-title">
-                                    <i class="fas fa-book"></i>
-                                    الموديولات (${course.modules.length})
-                                </div>
-                                ${course.modules.slice(0, 3).map(module => `
-                                    <div class="module-item">
-                                        <span>${module.title}</span>
-                                        <span class="module-duration">${module.duration}</span>
-                                    </div>
-                                `).join('')}
-                                ${course.modules.length > 3 ? `
-                                    <div class="module-item">
-                                        <span>+ ${course.modules.length - 3} موديول إضافي</span>
-                                    </div>
-                                ` : ''}
-                            </div>
-
-                            ${course.progress > 0 ? `
-                                <div class="course-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: ${course.progress}%"></div>
-                                    </div>
-                                    <div class="progress-text">
-                                        <span>مكتمل ${course.progress}%</span>
-                                        <span>استمر في التعلم</span>
-                                    </div>
-                                </div>
-                            ` : ''}
-
-                            <div class="course-footer">
-                                <div class="rating">
-                                    <i class="fas fa-star"></i>
-                                    ${course.rating}
-                                </div>
-                                <div class="price ${course.price === '0' ? 'free' : ''}">
-                                    ${course.price === '0' ? 'مجاناً' : course.price + ' ر.س'}
-                                </div>
-                            </div>
-
-                            <a href="coursedetails.html" class="btn-enroll" >
-                                ${course.progress > 0 ? 'متابعة التعلم' : 'التسجيل الآن'}
-                                <i class="fas fa-arrow-left"></i>
-                            </a>
-                        </div>
-                    `;
-
-                    coursesGrid.appendChild(courseElement);
-                }, index * 100);
-            });
-        }
-
-        // تصفية المقررات
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                const category = this.textContent;
-                if (category === 'الكل') {
-                    renderCourses(courses);
-                } else {
-                    const filteredCourses = courses.filter(course => course.category === category);
-                    renderCourses(filteredCourses);
-                }
-            });
-        });
-
-        // بحث المقررات
-        document.querySelector('.search-box').addEventListener('input', function (e) {
-            const searchTerm = e.target.value.toLowerCase();
-            if (searchTerm.length === 0) {
-                renderCourses(courses);
-                return;
+    @section('js')
+        <script>
+            // AJAX filtering for search and categories
+            function fetchCourses(category = '', search = '') {
+                $.ajax({
+                    url: '{{ route("courses") }}',
+                    type: 'GET',
+                    data: {
+                        category: category,
+                        search: search
+                    },
+                    success: function(response) {
+                        $('#coursesGrid').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching courses:', error);
+                    }
+                });
             }
 
-            const filteredCourses = courses.filter(course =>
-                course.title.toLowerCase().includes(searchTerm) ||
-                course.instructor.toLowerCase().includes(searchTerm) ||
-                course.category.toLowerCase().includes(searchTerm)
-            );
-            renderCourses(filteredCourses);
-        });
+            // Handle category button clicks
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.value;
+                    const search = document.querySelector('.search-box').value;
+                    fetchCourses(category, search);
 
-        // عرض جميع المقررات عند التحميل
-        window.onload = function () {
-            renderCourses(courses);
-        };
-    </script>
-@endsection
+                    // Update active class
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Handle search input
+            let searchTimeout;
+            document.querySelector('.search-box').addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const search = this.value;
+                const activeCategory = document.querySelector('.filter-btn.active').value || '';
+                searchTimeout = setTimeout(() => {
+                    fetchCourses(activeCategory, search);
+                }, 500); // Debounce search
+            });
+
+            // Handle search button click
+            document.querySelector('.search-container button').addEventListener('click', function(e) {
+                e.preventDefault();
+                const search = document.querySelector('.search-box').value;
+                const activeCategory = document.querySelector('.filter-btn.active').value || '';
+                fetchCourses(activeCategory, search);
+            });
+        </script>
+    @endsection
 @endsection

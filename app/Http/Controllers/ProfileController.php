@@ -108,17 +108,14 @@ class ProfileController extends Controller
         $request->validate([
             'password' => ['required', 'current_password'],
         ]);
-        if ($request->hasFile('avatar')) {
-            // حذف الصورة القديمة إن وجدت
-            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                Storage::disk('public')->delete($user->avatar);
-            }
 
-            // تخزين الصورة الجديدة
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $path;
-        }
         $user = auth()->user();
+
+        // حذف الصورة القديمة إن وجدت
+        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
         Auth::logout();
         $user->delete();
 

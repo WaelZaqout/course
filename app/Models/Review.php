@@ -11,13 +11,20 @@ class Review extends Model
         'user_id',
         'rating',
         'body',
-        'approved'
-        ];
-        public function user(){
-            return $this->belongsTo(User::class);
-        }
-        public function course(){
-            return $this->belongsTo(Course::class);
-        }
+        'approved',
+    ];
 
+    protected $casts = [
+        'approved' => 'boolean',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }

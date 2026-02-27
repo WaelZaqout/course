@@ -45,7 +45,7 @@ return [
     */
 
     'webhook' => [
-        'secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'secret' => env('STRIPE_WEBHOOK_SECRET', 'whsec_a9cdca6f21f1378cd4518e3d81d6b40613784d0fb6299338bd923196ea50d42d'),
         'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         'events' => WebhookCommand::DEFAULT_EVENTS,
     ],

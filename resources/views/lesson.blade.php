@@ -64,24 +64,24 @@
             <section class="main-content">
                 <!-- Tabs -->
                 <div class="tabs">
-                    <button class="tab-button active" data-tab="content">
-                        <i class="fas fa-list"></i>
-                        المحتويات
+                    <button class="tab-button active" data-tab="videos">
+                        <i class="fas fa-video"></i>
+                        الفيديوهات
                     </button>
-                    <button class="tab-button" data-tab="tests">
-                        <i class="fas fa-clipboard-list"></i>
-                        الاختبارات
+                    <button class="tab-button" data-tab="files">
+                        <i class="fas fa-file-alt"></i>
+                        الملفات
                     </button>
                 </div>
 
                 <!-- Video Player -->
                 <div class="video-player" id="videoContainer"
                     style="
-            background-image: url('{{ $course->cover ? asset('storage/' . $course->cover) : asset('images/default-course.jpg') }}');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-         ">
+                            background-image: url('{{ $course->cover ? asset('storage/' . $course->cover) : asset('images/default-course.jpg') }}');
+                            background-size: cover;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            ">
                     <div class="play-btn" id="playButton" onclick="playLocalVideo(event)">
                         <i class="fas fa-play"></i>
                     </div>
@@ -95,14 +95,10 @@
                 </div>
 
                 <!-- Tab Content -->
-                <div id="content" class="tab-content active">
-
-                    <!-- عرض السكاشن والدروس -->
+                <div id="videos" class="tab-content active">
                     @forelse($course->sections as $section)
                         <div class="lesson-card"
                             style="margin-top:20px; border:1px solid #ddd; border-radius:10px; background:#fff;">
-
-                            <!-- عنوان السكشن -->
                             <div class="lesson-header"
                                 style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;"
                                 onclick="toggleSection({{ $section->id }})">
@@ -110,19 +106,19 @@
                                 <span id="section-arrow-{{ $section->id }}">▶</span>
                             </div>
 
-                            <!-- دروس السكشن -->
                             <div class="section-content" id="section-{{ $section->id }}"
                                 style="display:none; margin-top:15px;">
-                                @if ($section->lessons->count())
-                                    <!-- داخل عرض الدروس -->
-                                    @foreach ($section->lessons as $lesson)
+                                @php
+                                    $videoLessons = $section->lessons->whereNotNull('video_path');
+                                @endphp
+
+                                @if ($videoLessons->count())
+                                    @foreach ($videoLessons as $lesson)
                                         <div class="lesson-card"
                                             style="margin-top:10px; padding:10px; border:1px solid #eee; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
 
-                                            <!-- عنوان الدرس + مدة الفيديو -->
                                             <div class="lesson-title" style="display:flex; align-items:center; gap:10px;">
                                                 🎬 {{ $lesson->title }}
-
                                                 @if ($lesson->duration_sec)
                                                     <span style="color:#666; font-size:13px;">
                                                         ⏱
@@ -131,19 +127,16 @@
                                                 @endif
                                             </div>
 
-                                            <!-- زر التشغيل (دائرة صفراء) -->
-                                            @if ($lesson->video_path)
-                                                <button
-                                                    onclick="playLessonVideo('{{ asset('storage/' . $lesson->video_path) }}')"
-                                                    style="width:40px; height:40px; border-radius:50%; background:#ffc107; border:none; cursor:pointer; display:flex; justify-content:center; align-items:center;">
-                                                    <i class="fas fa-play"
-                                                        style="color:#000; font-size:14px; margin-left:2px;"></i>
-                                                </button>
-                                            @endif
+                                            <button
+                                                onclick="playLessonVideo('{{ asset('storage/' . $lesson->video_path) }}')"
+                                                style="width:40px; height:40px; border-radius:50%; background:#ffc107; border:none; cursor:pointer; display:flex; justify-content:center; align-items:center;">
+                                                <i class="fas fa-play"
+                                                    style="color:#000; font-size:14px; margin-left:2px;"></i>
+                                            </button>
                                         </div>
                                     @endforeach
                                 @else
-                                    <p style="color:#777; margin-top:10px;">🚫 لا يوجد دروس في هذا السكشن</p>
+                                    <p style="color:#777; margin-top:10px;">🚫 لا يوجد فيديوهات في هذا السكشن</p>
                                 @endif
                             </div>
                         </div>
@@ -152,17 +145,44 @@
                     @endforelse
                 </div>
 
+                <div id="files" class="tab-content">
+                    @php
+                        $lessonsWithFiles = collect();
+                        foreach ($course->sections as $section) {
+                            $lessonsWithFiles = $lessonsWithFiles->merge($section->lessons->whereNotNull('file_path'));
+                        }
+                    @endphp
+
+                    @forelse ($lessonsWithFiles as $lesson)
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="file-info">
+                                <h4>{{ $lesson->title ?? 'ملف' }}</h4>
+                                <small>📂 اضغط للعرض أو التحميل</small>
+                            </div>
+                            <div class="file-action">
+                                <a href="{{ asset('storage/' . $lesson->file_path) }}" target="_blank">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open"></i>
+                            <h3>🚫 لا توجد ملفات متاحة</h3>
+                            <p>سيتم إضافة الملفات قريبًا</p>
+                        </div>
+                    @endforelse
+                </div>
+
 
         </div>
 
 
-        <div id="tests" class="tab-content">
-            <div class="empty-state">
-                <i class="fas fa-clipboard-list"></i>
-                <h3>لا توجد اختبارات متاحة</h3>
-                <p>سيتم إضافة الاختبارات قريبًا</p>
-            </div>
-        </div>
+
+
         </section>
         </div>
     </main>
